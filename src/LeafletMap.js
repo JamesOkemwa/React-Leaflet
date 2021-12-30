@@ -1,0 +1,91 @@
+import React, { useState, createRef } from "react"
+import { MapContainer, TileLayer, Marker, Popup  } from "react-leaflet"
+import L from 'leaflet'
+import Leaflet from 'leaflet'
+import { Icon } from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+import * as parkData from "./sample_json.json"
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import useGeolocation from "./hooks/useGeolocation"
+
+const markerIcon = new Leaflet.Icon({
+    iconUrl: require("./icons/location-icon.png"),
+    iconSize: [35, 45],
+    iconAnchor: [17, 46], //left/right top/bottom
+    popupAnchor: [0, -46]
+})
+
+let DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [24, 36],
+    iconAnchor: [12, 36], //left/right top/bottom
+    popupAnchor: [0, -36]
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+
+const LeafletMap = () => {
+    const [map, setMap ] = useState(null)
+    const [center, setCenter ] = useState([-1.28333, 36.81667])
+    const [activePark, setActivePark ] = useState(null)
+    const ZOOM_LEVEL = 9
+    const mapRef = createRef()
+
+    const location = useGeolocation()
+
+    const showMyLocation = () => {
+        if (location.loaded && !location.error) {
+            map.flyTo([location.coordinates.lat, location.coordinates.lng], 15, {animate:true})
+        } else {
+            alert(location.error.message)
+        }
+    }
+
+    return (
+        <div style={{ height: "100vh", position: "relative", marginTop: 0 }}>
+            <button onClick={showMyLocation}>Locate Me</button>
+            <MapContainer 
+                center={center}
+                zoom={ZOOM_LEVEL}
+                style={{ height: "100%", position: "absolute", width: "100%"}}
+                whenCreated={map => setMap(map)}
+            >
+                <TileLayer 
+                    attribution=''
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+
+                {parkData.features.map(park => (
+                    <Marker 
+                        key={park.properties.PARK_ID}
+                        position={[ park.geometry.coordinates[1], park.geometry.coordinates[0] ]}
+                        onClick={() => {
+                            setActivePark(park)
+                        }}
+                        // icon={markerIcon}
+                    >
+                        <Popup>
+                            <b>{park.properties.NAME}</b> <br/>
+                            {park.properties.DESCRIPTION}
+                        </Popup>
+                    </Marker>
+                ))}
+
+                {location.loaded && !location.error && (
+                    <Marker
+                        position={[ location.coordinates.lat, location.coordinates.lng ]}
+                    >
+                        <Popup>
+                            <b>You are here</b>
+                        </Popup>
+                    </Marker>
+                )}
+
+            </MapContainer>
+        </div>
+    )
+}
+
+export default LeafletMap
