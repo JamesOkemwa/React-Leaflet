@@ -1,5 +1,7 @@
 import React, { useState, createRef } from "react"
-import { MapContainer, TileLayer, Marker, Popup  } from "react-leaflet"
+import { MapContainer, TileLayer, FeatureGroup, Marker, Popup  } from "react-leaflet"
+import  { EditControl } from "react-leaflet-draw"
+import "leaflet-draw/dist/leaflet.draw.css"
 import L from 'leaflet'
 import Leaflet from 'leaflet'
 import { Icon } from 'leaflet'
@@ -26,6 +28,18 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// Fixing the leaflet-draw icons
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png",
+  iconUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
+});
+
 const LeafletMap = () => {
     const [map, setMap ] = useState(null)
     const [center, setCenter ] = useState([-1.28333, 36.81667])
@@ -43,6 +57,10 @@ const LeafletMap = () => {
         }
     }
 
+    const _created = (e) => {
+        console.log(e)
+    }
+
     return (
         <div style={{ height: "100vh", position: "relative", marginTop: 0 }}>
             <button onClick={showMyLocation}>Locate Me</button>
@@ -56,6 +74,20 @@ const LeafletMap = () => {
                     attribution=''
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+
+                <FeatureGroup>
+                    <EditControl 
+                        position="topright"
+                        onCreated={_created}
+                        draw={{
+                            rectangle: false,
+                            circle: false,
+                            circlemarker: false,
+                            marker: false,
+                            polyline: false
+                        }}
+                    />
+                </FeatureGroup>
 
                 {parkData.features.map(park => (
                     <Marker 
