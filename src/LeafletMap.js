@@ -10,6 +10,7 @@ import * as parkData from "./sample_json.json"
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import useGeolocation from "./hooks/useGeolocation"
+import MeasureControl from "./components/pluggins/MeasureControl"
 
 const markerIcon = new Leaflet.Icon({
     iconUrl: require("./icons/location-icon.png"),
@@ -45,7 +46,6 @@ const LeafletMap = () => {
     const [center, setCenter ] = useState([-1.28333, 36.81667])
     const [activePark, setActivePark ] = useState(null)
     const ZOOM_LEVEL = 9
-    const mapRef = createRef()
 
     const location = useGeolocation()
 
@@ -114,6 +114,8 @@ const LeafletMap = () => {
                         </Popup>
                     </Marker>
                 )}
+
+                <MeasureControl />
 
             </MapContainer>
         </div>
