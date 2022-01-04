@@ -13,6 +13,7 @@ import useGeolocation from "./hooks/useGeolocation"
 import MeasureControl from "./components/pluggins/MeasureControl"
 import PrintDownloadMap from "./components/pluggins/PrintDownloadMap"
 import MouseCoordinates from "./components/pluggins/MouseCoordinates"
+import WMSLayer from "./components/layers/WMSLayer"
 
 const markerIcon = new Leaflet.Icon({
     iconUrl: require("./icons/location-icon.png"),
@@ -116,6 +117,8 @@ const LeafletMap = () => {
                         </Popup>
                     </Marker>
                 )}
+
+                <WMSLayer baseUrl='http://ows.mundialis.de/services/service?' layerName='TOPO-OSM-WMS'/>
 
                 <MeasureControl />
                 <PrintDownloadMap exportOnly={false} title='Print Map'/>
