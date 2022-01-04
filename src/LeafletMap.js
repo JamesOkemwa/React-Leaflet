@@ -1,5 +1,5 @@
 import React, { useState, createRef } from "react"
-import { MapContainer, TileLayer, FeatureGroup, Marker, Popup  } from "react-leaflet"
+import { MapContainer, TileLayer, FeatureGroup, Marker, Popup, WMSTileLayer, LayersControl, LayerGroup } from "react-leaflet"
 import  { EditControl } from "react-leaflet-draw"
 import "leaflet-draw/dist/leaflet.draw.css"
 import L from 'leaflet'
@@ -73,10 +73,32 @@ const LeafletMap = () => {
                 style={{ height: "100%", position: "absolute", width: "100%"}}
                 whenCreated={map => setMap(map)}
             >
-                <TileLayer 
-                    attribution=''
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+                <LayersControl position="topright">
+                    <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
+                        <TileLayer 
+                            attribution=''
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                    </LayersControl.BaseLayer>
+                    <LayersControl.BaseLayer name="OpenStreetMap.BlackAndWhite">
+                        <TileLayer 
+                            attribution=''
+                            url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+                        />
+                    </LayersControl.BaseLayer>
+                    <LayersControl.Overlay name="Topography">
+                        <WMSTileLayer 
+                            url={'http://ows.mundialis.de/services/service?'}
+                            layers={'TOPO-WMS'}
+                        />
+                    </LayersControl.Overlay>
+                    <LayersControl.Overlay name="Places">
+                        <WMSTileLayer 
+                            url={'http://ows.mundialis.de/services/service?'}
+                            layers={'OSM-Overlay-WMS'}
+                        />
+                    </LayersControl.Overlay>
+                </LayersControl>
 
                 <FeatureGroup>
                     <EditControl 
@@ -99,7 +121,6 @@ const LeafletMap = () => {
                         onClick={() => {
                             setActivePark(park)
                         }}
-                        // icon={markerIcon}
                     >
                         <Popup>
                             <b>{park.properties.NAME}</b> <br/>
@@ -118,7 +139,7 @@ const LeafletMap = () => {
                     </Marker>
                 )}
 
-                <WMSLayer baseUrl='http://ows.mundialis.de/services/service?' layerName='TOPO-OSM-WMS'/>
+                {/* <WMSLayer baseUrl='http://ows.mundialis.de/services/service?' layerName='TOPO-WMS,OSM-Overlay-WMS'/> */}
 
                 <MeasureControl />
                 <PrintDownloadMap exportOnly={false} title='Print Map'/>
