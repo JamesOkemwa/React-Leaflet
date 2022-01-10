@@ -7,6 +7,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "leaflet": "^1.7.1",
+    "leaflet-basemaps": "^0.3.4",
     "leaflet-draw": "^1.0.4",
     "leaflet-easyprint": "^2.1.9",
     "leaflet-measure": "^3.1.0",

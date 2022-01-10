@@ -1,5 +1,14 @@
 import React, { useState, createRef } from "react"
-import { MapContainer, TileLayer, FeatureGroup, Marker, Popup, WMSTileLayer, LayersControl, LayerGroup } from "react-leaflet"
+import { 
+    MapContainer, 
+    TileLayer, 
+    FeatureGroup, 
+    Marker, 
+    Popup, 
+    WMSTileLayer, 
+    LayersControl, 
+    LayerGroup, 
+} from "react-leaflet"
 import  { EditControl } from "react-leaflet-draw"
 import "leaflet-draw/dist/leaflet.draw.css"
 import L from 'leaflet'
@@ -13,7 +22,7 @@ import useGeolocation from "./hooks/useGeolocation"
 import MeasureControl from "./components/pluggins/MeasureControl"
 import PrintDownloadMap from "./components/pluggins/PrintDownloadMap"
 import MouseCoordinates from "./components/pluggins/MouseCoordinates"
-import WMSLayer from "./components/layers/WMSLayer"
+import BasemapSwitcher from "./components/pluggins/BasemapSwitcher"
 
 const markerIcon = new Leaflet.Icon({
     iconUrl: require("./icons/location-icon.png"),
@@ -74,7 +83,7 @@ const LeafletMap = () => {
                 whenCreated={map => setMap(map)}
             >
                 <LayersControl position="topright">
-                    <LayersControl.BaseLayer checked name="OpenStreetMap.Mapnik">
+                    {/* <LayersControl.BaseLayer checked name="OpenStreetMap Standard">
                         <TileLayer 
                             attribution=''
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -85,7 +94,7 @@ const LeafletMap = () => {
                             attribution=''
                             url="https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
                         />
-                    </LayersControl.BaseLayer>
+                    </LayersControl.BaseLayer> */}
                     <LayersControl.Overlay name="Topography">
                         <WMSTileLayer 
                             url={'http://ows.mundialis.de/services/service?'}
@@ -145,6 +154,7 @@ const LeafletMap = () => {
                 <PrintDownloadMap exportOnly={false} title='Print Map'/>
                 <PrintDownloadMap exportOnly={true} title='Download Map'/>
                 <MouseCoordinates />
+                <BasemapSwitcher />
             </MapContainer>
         </div>
     )
