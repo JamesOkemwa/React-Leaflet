@@ -23,6 +23,7 @@ import MeasureControl from "./components/pluggins/MeasureControl"
 import PrintDownloadMap from "./components/pluggins/PrintDownloadMap"
 import MouseCoordinates from "./components/pluggins/MouseCoordinates"
 import BasemapSwitcher from "./components/pluggins/BasemapSwitcher"
+import Legend from "./components/pluggins/Legend"
 
 const markerIcon = new Leaflet.Icon({
     iconUrl: require("./icons/location-icon.png"),
@@ -155,6 +156,7 @@ const LeafletMap = () => {
                 <PrintDownloadMap exportOnly={true} title='Download Map'/>
                 <MouseCoordinates />
                 <BasemapSwitcher />
+                <Legend />
             </MapContainer>
         </div>
     )

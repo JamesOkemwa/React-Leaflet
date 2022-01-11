@@ -12,10 +12,10 @@ const BasemapSwitcher = () => {
             attribution: '',
             label: 'OSM Standard'
         }),
-        L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-            attribution: '',
-            label: 'OSM Black and White'
-        }),
+        // L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+        //     attribution: '',
+        //     label: 'OSM Black and White'
+        // }),
         L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png', {
             attribution: '',
             label: 'Topography'
